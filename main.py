@@ -1,7 +1,7 @@
 import requests
 
 CANVAS_URL = "https://utexas.instructure.com"
-API_TOKEN = "1017~6nUrXLYhYDXDf3wY4eTf68AkYnyruv6tJPBKcuzvhHvNUPUGazLWk8QnYTACGkEX"
+API_TOKEN = "insert"
 COURSE_ID = "1442211"
 
 WEIGHTS = {
