@@ -1,8 +1,5 @@
 import requests
 
-# =========================
-# CONFIG
-# =========================
 CANVAS_URL = "https://utexas.instructure.com"
 API_TOKEN = "1017~6nUrXLYhYDXDf3wY4eTf68AkYnyruv6tJPBKcuzvhHvNUPUGazLWk8QnYTACGkEX"
 COURSE_ID = "1442211"
@@ -49,9 +46,6 @@ def extract_score(sub):
 
     return None
 
-# =========================
-# CANVAS FETCH
-# =========================
 def get_assignments():
     url = f"{CANVAS_URL}/api/v1/courses/{COURSE_ID}/assignments?per_page=100"
     return requests.get(url, headers=headers).json()
@@ -79,9 +73,6 @@ def is_real_assignment(a):
         a.get("points_possible", 0) > 0
     )
 
-# =========================
-# CATEGORY DETECTION
-# =========================
 def categorize(name):
     n = name.lower()
 
@@ -104,9 +95,6 @@ def categorize(name):
 
     return "worksheet"
 
-# =========================
-# BUILD ITEM LIST
-# =========================
 def build_items(assignments, submissions):
     items = []
 
@@ -142,10 +130,6 @@ def apply_drop(items, drop_n):
 
     return valid[drop_n:] if drop_n > 0 else valid
 
-# =========================
-# SAFE CATEGORY GRADE
-# =========================
-
 def category_score(items):
     earned = 0
     possible = 0
@@ -161,16 +145,13 @@ def category_score(items):
 
     return earned / possible if possible > 0 else 0
 
-# =========================
-# FINAL GRADE CALC
-# =========================
 def calculate_final(items):
     scores = {}
     used_weights = {}
 
     for c in WEIGHTS:
         if c == "final":
-            continue  # 🚨 exclude final entirely for current grade
+            continue 
 
         cat_items = [i for i in items if i["category"] == c]
         cat_items = apply_drop(cat_items, DROP_RULES.get(c, 0))
@@ -190,15 +171,9 @@ def calculate_final(items):
 
     return final, scores
 
-# =========================
-# FINAL EXAM REQUIREMENT
-# =========================
 def needed_on_final(current, exam_weight, target):
     return (target - current * (1 - exam_weight)) / exam_weight
 
-# =========================
-# MAIN
-# =========================
 def main():
     assignments = get_assignments()
     submissions = get_submissions()
